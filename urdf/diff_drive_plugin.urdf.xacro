@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="diff_drive_plugin">
+    <xacro:macro name="diff_drive_plugin" params="namespace update_rate:=10 left_joint right_joint wheel_sep wheel_diam wheel_acc:=1.0 wheel_torq:=20 cmd_topic:=/cmd_vel odom_topic:=odom odom_frame:=odom base_frame:=base_link odom_src:=1 pub_odom_tf:=true pub_wheel_tf:=true pub_odom_topic:=true">
+
+        <!-- The documentation for the plugin is outdated, so the most updated info is obtained from the source code: -->
+        <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/blob/7bf18c7ad727e0d5f3c80c4dee01fc1429c16093/gazebo_plugins/include/gazebo_plugins/gazebo_ros_diff_drive.hpp#L54 -->
+        <!-- Diff drive -->
+        <gazebo>
+            <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+                <ros>
+                    <!-- Add a namespace -->
+                    <namespace>${namespace}</namespace>
+                </ros>
+                <!-- Update rate in Hz -->
+                <update_rate>${update_rate}</update_rate>
+
+                <!-- wheels -->
+                <num_wheel_pairs>1</num_wheel_pairs>
+                <left_joint>${left_joint}</left_joint>
+                <right_joint>${right_joint}</right_joint>
+
+                <!-- kinematics -->
+                <wheel_separation>${wheel_sep}</wheel_separation>
+                <wheel_diameter>${wheel_diam}</wheel_diameter>
+
+                <!-- limits -->
+                <max_wheel_acceleration>${wheel_acc}</max_wheel_acceleration>
+                <max_wheel_torque>${wheel_torq}</max_wheel_torque>
+                
+                <!-- input -->
+                <command_topic>${cmd_topic}</command_topic>
+
+                <!-- output -->                
+                <odometry_source>${odom_src}</odometry_source> <!-- Odometry source, 0 for ENCODER, 1 for WORLD, defaults to WORLD -->
+                <publish_odom>${pub_odom_topic}</publish_odom>
+                <publish_odom_tf>${pub_odom_tf}</publish_odom_tf>
+                <publish_wheel_tf>${pub_wheel_tf}</publish_wheel_tf>
+                <odometry_topic>${odom_topic}</odometry_topic>
+                <odometry_frame>${odom_frame}</odometry_frame>
+                <robot_base_frame>${base_frame}</robot_base_frame>
+
+                <!-- Noise -->
+                <covariance_x>0.01</covariance_x>
+                <covariance_y>0.01</covariance_y>
+                <covariance_yaw>0.01</covariance_yaw>
+            </plugin>
+        </gazebo>
+    </xacro:macro>
+</robot>

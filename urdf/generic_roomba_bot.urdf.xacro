@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="generic_roomba_bot">
+
+    <xacro:property name="bot_mass" default="25.0" />
+    <xacro:property name="bot_radius" default="0.5" />
+    <xacro:property name="bot_length" default="1.0" />
+    <xacro:property name="wheel_mass" default="1.0" />
+    <xacro:property name="wheel_radius" default="0.2" />
+    <xacro:property name="wheel_width" default="0.05" />
+    <xacro:property name="wheel_sep" value="${2*0.9*bot_radius}" />
+
+    <xacro:include filename="$(find ros2_robot_sims)/urdf/generic_roomba_bot_gazebo.urdf.xacro"/>
+
+    <link name="base_link">
+        <inertial>
+            <mass value="${bot_mass}" />
+            <!-- the wheel axle is where base_link is on, and it should be in the 20% of the bot's height -->
+            <origin xyz="0 0 ${0.8*bot_length/2}" />
+            <inertia ixx="${1/12 * bot_mass * (3*bot_radius*bot_radius + bot_length*bot_length)}" ixy="0" ixz="0" iyy="${1/12 * bot_mass * (3*bot_radius*bot_radius + bot_length*bot_length)}" iyz="0" izz="${1/2 * bot_mass * (bot_radius*bot_radius)}" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 ${bot_length/2 - 0.1*bot_length}" />
+            <geometry>
+                <cylinder radius="${bot_radius}" length="${bot_length}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 ${bot_length/2 - 0.1*bot_length}" />
+            <geometry>
+                <cylinder radius="${bot_radius}" length="${bot_length}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_link2left_wheel" type="continuous">
+        <parent link="base_link" />
+        <child link="left_wheel" />
+        <origin xyz="0 -${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="left_wheel">
+        <inertial>
+            <mass value="${wheel_mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${1/12 * wheel_mass * (3*wheel_radius*wheel_radius + wheel_width*wheel_width)}" ixy="0" ixz="0" iyy="${1/12 * wheel_mass * (3*wheel_radius*wheel_radius + wheel_width*wheel_width)}" iyz="0" izz="${1/2 * wheel_mass * (wheel_radius*wheel_radius)}" />
+        </inertial>
+
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_link2right_wheel" type="continuous">
+        <parent link="base_link" />
+        <child link="right_wheel" />
+        <origin xyz="0 ${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="right_wheel">
+        <inertial>
+            <mass value="${wheel_mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${1/12 * wheel_mass * (3*wheel_radius*wheel_radius + wheel_width*wheel_width)}" ixy="0" ixz="0" iyy="${1/12 * wheel_mass * (3*wheel_radius*wheel_radius + wheel_width*wheel_width)}" iyz="0" izz="${1/2 * wheel_mass * (wheel_radius*wheel_radius)}" />
+        </inertial>
+
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_width}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_link2front_caster" type="fixed">
+        <parent link="base_link" />
+        <child link="front_caster" />
+        <origin xyz="${0.9*bot_radius} 0 -${wheel_radius - 0.2*wheel_radius}" rpy="0 0 0" />
+    </joint>
+
+    <link name="front_caster">
+        <inertial>
+            <mass value="${0.4*wheel_mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${2/5 * wheel_mass * wheel_radius*wheel_radius}" ixy="0" ixz="0" iyy="${2/5 * wheel_mass * wheel_radius*wheel_radius}" iyz="0" izz="${2/5 * wheel_mass * wheel_radius*wheel_radius}" />
+        </inertial>
+
+        <visual>
+            <geometry>
+                <sphere radius="${0.2*wheel_radius}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="${0.2*wheel_radius}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_link2rear_caster" type="fixed">
+        <parent link="base_link" />
+        <child link="rear_caster" />
+        <origin xyz="-${0.9*bot_radius} 0 -${wheel_radius - 0.2*wheel_radius}" rpy="0 0 0" />
+    </joint>
+
+    <link name="rear_caster">
+        <inertial>
+            <mass value="${0.4*wheel_mass}" />
+            <origin xyz="0 0 0" />
+            <inertia ixx="${2/5 * wheel_mass * wheel_radius*wheel_radius}" ixy="0" ixz="0" iyy="${2/5 * wheel_mass * wheel_radius*wheel_radius}" iyz="0" izz="${2/5 * wheel_mass * wheel_radius*wheel_radius}" />
+        </inertial>
+
+        <visual>
+            <geometry>
+                <sphere radius="${0.2*wheel_radius}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <geometry>
+                <sphere radius="${0.2*wheel_radius}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <!-- Diff drive plugin -->
+    <xacro:include filename="$(find ros2_robot_sims)/urdf/diff_drive_plugin.urdf.xacro" />
+    <xacro:diff_drive_plugin namespace="" update_rate="10" left_joint="base_link2left_wheel" right_joint="base_link2right_wheel" wheel_sep="${wheel_sep}" wheel_diam="${2*wheel_radius}" wheel_acc="1.0" wheel_torq="20"/>
+
+</robot>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<sdf version="1.7">
+    <model name="pioneer2dx_laser_imu">
+        <include>
+            <uri>model://pioneer2dx</uri>
+        </include>
+
+        <include>
+            <uri>model://velodyne_hdl-32</uri>
+        </include>
+
+        <joint name="lidar_joint" type="revolute">
+            <parent>pioneer2dx_laser_imu::pioneer2dx::chassis</parent>
+            <child>pioneer2dx_laser_imu::velodyne_hdl-32::base</child>
+            <axis>
+                <xyz>0 0 2</xyz>
+                <limit>
+                    <lower>0</lower>
+                    <upper>0</upper>
+                </limit>
+            </axis>
+        </joint>
+
+
+    </model>
+
+</sdf>
