@@ -2,14 +2,17 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="generic_roomba_bot">
 
     <xacro:property name="bot_mass" default="25.0" />
-    <xacro:property name="bot_radius" default="0.5" />
-    <xacro:property name="bot_length" default="1.0" />
+    <xacro:property name="bot_radius" default="0.75" />
+    <xacro:property name="bot_length" default="1.5" />
+    <xacro:property name="top_mass" value="${0.1*bot_mass}" />
+    <xacro:property name="top_radius" value="${0.15*bot_radius}" />
+    <xacro:property name="top_length" value="${0.05*bot_length}" />
     <xacro:property name="wheel_mass" default="1.0" />
     <xacro:property name="wheel_radius" default="0.2" />
     <xacro:property name="wheel_width" default="0.05" />
     <xacro:property name="wheel_sep" value="${2*0.9*bot_radius}" />
 
-    <xacro:include filename="$(find ros2_robot_sims)/urdf/generic_roomba_bot_gazebo.urdf.xacro"/>
+    <xacro:include filename="$(find ros2_robot_sims)/urdf/generic_roomba_bot_gazebo.urdf.xacro" />    
 
     <link name="base_link">
         <inertial>
@@ -30,6 +33,35 @@
             <origin xyz="0 0 ${bot_length/2 - 0.1*bot_length}" />
             <geometry>
                 <cylinder radius="${bot_radius}" length="${bot_length}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="base_link2top_link" type="fixed">
+        <parent link="base_link" />
+        <child link="top_link" />
+        <origin xyz="${0.9*bot_radius - top_radius} 0 ${0.9*bot_length + top_length/2}" rpy="0 0 0" />
+    </joint>
+
+    <link name="top_link">
+        <inertial>
+            <mass value="${top_mass}" />
+            <!-- the wheel axle is where base_link is on, and it should be in the 20% of the bot's height -->
+            <origin xyz="0 0 0" />
+            <inertia ixx="${1/12 * top_mass * (3*top_radius*top_radius + top_length*top_length)}" ixy="0" ixz="0" iyy="${1/12 * bot_mass * (3*top_radius*top_radius + top_length*top_length)}" iyz="0" izz="${1/2 * bot_mass * (top_radius*top_radius)}" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <cylinder radius="${top_radius}" length="${top_length}" />
+            </geometry>
+        </visual>
+
+        <collision>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <cylinder radius="${top_radius}" length="${top_length}" />
             </geometry>
         </collision>
     </link>
@@ -142,6 +174,12 @@
 
     <!-- Diff drive plugin -->
     <xacro:include filename="$(find ros2_robot_sims)/urdf/diff_drive_plugin.urdf.xacro" />
-    <xacro:diff_drive_plugin namespace="" update_rate="10" left_joint="base_link2left_wheel" right_joint="base_link2right_wheel" wheel_sep="${wheel_sep}" wheel_diam="${2*wheel_radius}" wheel_acc="1.0" wheel_torq="20"/>
+    <xacro:diff_drive_plugin namespace="" update_rate="10" left_joint="base_link2left_wheel" right_joint="base_link2right_wheel" wheel_sep="${wheel_sep}" wheel_diam="${2*wheel_radius}" wheel_acc="1.0" wheel_torq="20" />
+
+    <!-- 3-D LiDAR -->
+    <xacro:include filename="$(find velodyne_description)/urdf/VLP-16.urdf.xacro" />
+    <xacro:VLP-16 parent="top_link" name="velodyne" topic="/velodyne_points" hz="10" samples="100" gpu="false">
+        <origin xyz="0 0 ${top_length}" rpy="0 0 0" />
+    </xacro:VLP-16>
 
 </robot>

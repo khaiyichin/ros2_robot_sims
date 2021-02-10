@@ -2,12 +2,16 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="generic_roomba_bot_gazebo">
 
     <!-- File to modify gazebo properties -->
+    <gazebo reference="top_link">
+        <material>Gazebo/Yellow</material>
+    </gazebo>
 
     <gazebo reference="base_link">
         <material>Gazebo/Orange</material>
     </gazebo>
 
     <gazebo reference="front_caster">
+        <material>Gazebo/Black</material>
         <collision>
             <surface>
                 <contact>
@@ -28,6 +32,7 @@
     </gazebo>
 
     <gazebo reference="rear_caster">
+        <material>Gazebo/Black</material>
         <collision>
             <surface>
                 <contact>

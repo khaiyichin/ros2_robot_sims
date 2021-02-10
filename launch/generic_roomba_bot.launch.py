@@ -31,9 +31,25 @@ def generate_launch_description():
     assert os.path.exists(robot_urdf)
     urdf_contents = read_file(robot_urdf)
 
-    # Gazebo node
-    node_gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py'))
+    # Publish the urdf so that RViz gets it
+    node_robot_state_pub = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='both',
+        arguments=[robot_urdf]
+    )
+
+    # Gazebo launch file
+    launch_gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py')),
+    )
+
+    # RViz node
+    node_rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        # arguments=['-d', os.path.join(pkg_dolly_gazebo, 'rviz', 'dolly_gazebo.rviz')],
+        # condition=IfCondition(LaunchConfiguration('rviz'))
     )
 
     # Spawn entity node
@@ -47,10 +63,31 @@ def generate_launch_description():
                    '-file', robot_urdf]
     )
 
-    launch_arg_gazebo = DeclareLaunchArgument(
+    # Static transform publisher node to establish odom to map
+    node_static_transform_pub = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0', '0', '0', '0', '0', '1', 'map', 'odom']
+    )
+
+    launch_arg_gazebo_world = DeclareLaunchArgument(
         'world',
         default_value=[os.path.join(pkg_gazebo_models_worlds_collection, 'worlds', 'empty_world.world'), ''],
         description='SDF world file'
     )
+
+    launch_arg_gazebo_verbose = DeclareLaunchArgument(
+        'verbose',
+        default_value='true',
+        description='Set true for gazebo messages'
+    )
     
-    return LaunchDescription([launch_arg_gazebo, node_spawn_entity, node_gazebo])
+    return LaunchDescription([
+        launch_arg_gazebo_world,
+        launch_arg_gazebo_verbose,
+        node_spawn_entity,
+        launch_gazebo,
+        node_rviz,
+        node_static_transform_pub,
+        node_robot_state_pub        
+    ])

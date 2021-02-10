@@ -4,6 +4,7 @@
 
         <!-- The documentation for the plugin is outdated, so the most updated info is obtained from the source code: -->
         <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/blob/7bf18c7ad727e0d5f3c80c4dee01fc1429c16093/gazebo_plugins/include/gazebo_plugins/gazebo_ros_diff_drive.hpp#L54 -->
+        <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/wiki/ROS-2-Migration:-Diff-drive -->
         <!-- Diff drive -->
         <gazebo>
             <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
