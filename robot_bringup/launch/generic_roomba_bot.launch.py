@@ -56,7 +56,7 @@ def generate_launch_description():
     node_spawn_entity = Node(
         package='gazebo_ros',
         executable='spawn_entity.py',
-        arguments=['-entity', 'myentity',
+        arguments=['-entity', 'my_robot',
                    '-x', '0',
                    '-y', '0',
                    '-z', '0',
@@ -72,7 +72,7 @@ def generate_launch_description():
 
     launch_arg_gazebo_world = DeclareLaunchArgument(
         'world',
-        default_value=[os.path.join(pkg_gazebo_models_worlds_collection, 'worlds', 'office_small.world'), ''],
+        default_value=['worlds/empty.world'],
         description='SDF world file'
     )
 

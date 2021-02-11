@@ -2,15 +2,15 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="generic_roomba_bot">
 
     <xacro:property name="bot_mass" default="25.0" />
-    <xacro:property name="bot_radius" default="0.75" />
-    <xacro:property name="bot_length" default="1.5" />
+    <xacro:property name="bot_radius" default="0.5" />
+    <xacro:property name="bot_length" default="1.0" />
     <xacro:property name="top_mass" value="${0.1*bot_mass}" />
     <xacro:property name="top_radius" value="${0.15*bot_radius}" />
     <xacro:property name="top_length" value="${0.05*bot_length}" />
     <xacro:property name="wheel_mass" default="1.0" />
     <xacro:property name="wheel_radius" default="0.2" />
     <xacro:property name="wheel_width" default="0.05" />
-    <xacro:property name="wheel_sep" value="${2*0.9*bot_radius}" />
+    <xacro:property name="wheel_sep" value="${2*0.8*bot_radius}" />
 
     <xacro:include filename="$(find robot_description)/urdf/generic_roomba_bot_gazebo.urdf.xacro" />    
 
