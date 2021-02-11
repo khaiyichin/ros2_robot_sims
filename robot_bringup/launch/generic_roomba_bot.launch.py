@@ -18,11 +18,11 @@ def generate_launch_description():
     
     # Define package share directory paths
     pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
-    pkg_ros2_robot_sims = get_package_share_directory('ros2_robot_sims')
+    pkg_robot_description = get_package_share_directory('robot_description')
     pkg_gazebo_models_worlds_collection = get_package_share_directory('gazebo_models_worlds_collection')
 
 
-    urdf_dir =  os.path.join(pkg_ros2_robot_sims, 'urdf')
+    urdf_dir =  os.path.join(pkg_robot_description, 'urdf')
     xacro_urdf = os.path.join(urdf_dir, 'generic_roomba_bot.urdf.xacro')
     robot_urdf = os.path.join(urdf_dir, 'generic_roomba_bot.urdf')
     xacro_proc = subprocess.Popen("xacro {0} > {1}".format(xacro_urdf, robot_urdf) ,
@@ -72,7 +72,7 @@ def generate_launch_description():
 
     launch_arg_gazebo_world = DeclareLaunchArgument(
         'world',
-        default_value=[os.path.join(pkg_gazebo_models_worlds_collection, 'worlds', 'empty_world.world'), ''],
+        default_value=[os.path.join(pkg_gazebo_models_worlds_collection, 'worlds', 'office_small.world'), ''],
         description='SDF world file'
     )
 

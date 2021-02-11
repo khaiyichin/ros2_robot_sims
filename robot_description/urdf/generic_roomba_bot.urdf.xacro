@@ -12,7 +12,7 @@
     <xacro:property name="wheel_width" default="0.05" />
     <xacro:property name="wheel_sep" value="${2*0.9*bot_radius}" />
 
-    <xacro:include filename="$(find ros2_robot_sims)/urdf/generic_roomba_bot_gazebo.urdf.xacro" />    
+    <xacro:include filename="$(find robot_description)/urdf/generic_roomba_bot_gazebo.urdf.xacro" />    
 
     <link name="base_link">
         <inertial>
@@ -69,7 +69,7 @@
     <joint name="base_link2left_wheel" type="continuous">
         <parent link="base_link" />
         <child link="left_wheel" />
-        <origin xyz="0 -${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <origin xyz="0 ${wheel_sep/2} 0" rpy="1.5707 0 0" />
         <axis xyz="0 0 1" />
     </joint>
 
@@ -96,7 +96,7 @@
     <joint name="base_link2right_wheel" type="continuous">
         <parent link="base_link" />
         <child link="right_wheel" />
-        <origin xyz="0 ${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <origin xyz="0 -${wheel_sep/2} 0" rpy="1.5707 0 0" />
         <axis xyz="0 0 1" />
     </joint>
 
@@ -173,7 +173,7 @@
     </link>
 
     <!-- Diff drive plugin -->
-    <xacro:include filename="$(find ros2_robot_sims)/urdf/diff_drive_plugin.urdf.xacro" />
+    <xacro:include filename="$(find robot_description)/urdf/diff_drive_plugin.urdf.xacro" />
     <xacro:diff_drive_plugin namespace="" update_rate="10" left_joint="base_link2left_wheel" right_joint="base_link2right_wheel" wheel_sep="${wheel_sep}" wheel_diam="${2*wheel_radius}" wheel_acc="1.0" wheel_torq="20" />
 
     <!-- 3-D LiDAR -->
@@ -181,5 +181,12 @@
     <xacro:VLP-16 parent="top_link" name="velodyne" topic="/velodyne_points" hz="10" samples="100" gpu="false">
         <origin xyz="0 0 ${top_length}" rpy="0 0 0" />
     </xacro:VLP-16>
+
+    <!-- P3D plugin -->
+    <xacro:include filename="$(find robot_description)/urdf/p3d_plugin.urdf.xacro"/>
+    <xacro:p3d_plugin namespace="" link_name="base_link" frame_name="map">
+        <xyz_offsets>0 0 0</xyz_offsets>
+        <rpy_offsets>0 0 0</rpy_offsets>
+    </xacro:p3d_plugin> 
 
 </robot>

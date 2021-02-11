@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="p3d_plugin">
+    <xacro:macro name="p3d_plugin" params="namespace link_name frame_name *xyz_offsets *rpy_offsets update_rate:=2 gaussian_noise:=0.01">
+
+        <!-- The documentation for the plugin is outdated, so the most updated info is obtained from the header file: -->
+        <!-- https://github.com/ros-simulation/gazebo_ros_pkgs/blob/foxy/gazebo_plugins/include/gazebo_plugins/gazebo_ros_p3d.hpp -->
+        <gazebo>
+            <plugin name="gazebo_ros_p3d" filename="libgazebo_ros_p3d.so">
+
+                <ros>
+                    <!-- Add namespace and remap the default topic -->
+                    <namespace>${namespace}</namespace>
+                    <remapping>odom:=odom_gt</remapping>
+                </ros>
+
+                <body_name>${link_name}</body_name>
+                <frame_name>${frame_name}</frame_name>
+                <update_rate>${update_rate}</update_rate>
+                <xacro:insert_block name="xyz_offsets" />
+                <xacro:insert_block name="rpy_offsets" />
+                <gaussian_noise>${gaussian_noise}</gaussian_noise>
+
+            </plugin>
+        </gazebo>
+    </xacro:macro>
+</robot>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(ros2_robot_sims)
+project(robot_description)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -38,7 +38,6 @@ ament_package()
 
 install(
   DIRECTORY
-    launch
     models
     worlds
     urdf
