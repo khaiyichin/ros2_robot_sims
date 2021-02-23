@@ -69,7 +69,7 @@
     <joint name="base_link2left_wheel" type="continuous">
         <parent link="base_link" />
         <child link="left_wheel" />
-        <origin xyz="0 ${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <origin xyz="0 ${wheel_sep/2} 0" rpy="-1.5707 0 0" />
         <axis xyz="0 0 1" />
     </joint>
 
@@ -96,7 +96,7 @@
     <joint name="base_link2right_wheel" type="continuous">
         <parent link="base_link" />
         <child link="right_wheel" />
-        <origin xyz="0 -${wheel_sep/2} 0" rpy="1.5707 0 0" />
+        <origin xyz="0 -${wheel_sep/2} 0" rpy="-1.5707 0 0" />
         <axis xyz="0 0 1" />
     </joint>
 

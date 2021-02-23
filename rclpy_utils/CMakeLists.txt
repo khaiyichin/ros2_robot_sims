@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(robot_bringup)
+project(rclpy_utils)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -17,9 +17,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+ament_python_install_package(
+  rclpy_utils
+  PACKAGE_DIR ${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -31,12 +37,5 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
-
-install(
-  DIRECTORY
-    launch rviz
-  DESTINATION
-    share/${PROJECT_NAME}/
-)
 
 ament_package()

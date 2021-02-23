@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(robot_bringup)
+project(robot_navigation)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -33,10 +33,8 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY
-    launch rviz
-  DESTINATION
-    share/${PROJECT_NAME}/
+  DIRECTORY launch rviz
+  DESTINATION share/${PROJECT_NAME}
 )
 
 ament_package()
